@@ -1,72 +1,35 @@
 <head>
   {{- partial "analytics" . -}}
 
-  <!-- Basic Meta -->
   <meta charset="utf-8">
+
+  {{- $pageTitle := .Title | default .Site.Title -}}
+  {{- $fullTitle := printf "%s | %s" $pageTitle .Site.Title -}}
+  <title>{{ $fullTitle }}</title>
+
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <!-- Page Title -->
-  <title>
-    {{- if .IsHome -}}
-      {{ .Site.Title }}
-    {{- else -}}
-      {{ .Title }} | {{ .Site.Title }}
-    {{- end }}
-  </title>
-
-  <!-- Favicons & Manifest -->
+  <!-- Favicon & Manifest -->
   <link rel="apple-touch-icon" sizes="180x180" href='{{ "apple-touch-icon.png" | relURL }}'>
   <link rel="icon" type="image/png" sizes="32x32" href='{{ "favicon-32x32.png" | relURL }}'>
   <link rel="icon" type="image/png" sizes="16x16" href='{{ "favicon-16x16.png" | relURL }}'>
   <link rel="manifest" href='{{ "site.webmanifest" | relURL }}'>
 
   <!-- FontAwesome -->
-  {{- if .Site.Params.icon.fontawesome -}}
-    <link href='{{ "/css/fa6.min.css" | relURL }}' rel="stylesheet" type="text/css">
+  {{- $fa := .Site.Params.icon.fontawesome | default false -}}
+  {{- $faCSS := resources.Get "css/fa6.min.css" | relURL -}}
+  {{- if $fa }}
+  <link href='{{ $faCSS }}' rel="stylesheet" type="text/css">
   {{- end }}
 
   <!-- CSS -->
-  {{- $styles := resources.Get "css/style.css" | postCSS -}}
-  {{- if hugo.IsServer -}}
-    <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
-  {{- else -}}
-    {{- $styles := $styles | minify | fingerprint | resources.PostProcess -}}
-    <link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
-  {{- end }}
+  {{- $styles := resources.Get "css/style.css" | postCSS | minify | fingerprint | resources.PostProcess -}}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
 
-  {{- if .IsHome -}}
-    <link rel="stylesheet" href='{{ "/css/swiper-bundle.min.css" | relURL }}'>
-  {{- end }}
-
-  <link href='{{ "/css/style.min.css" | relURL }}' rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href='{{ "/css/style.min.css" | relURL }}'>
   <link rel="stylesheet" href='{{ "/css/custom.css" | relURL }}'>
+  <link rel="stylesheet" href='{{ "/css/swiper-bundle.min.css" | relURL }}'>
 
-  <!-- SEO Meta Tags -->
-  {{- $desc := .Params.description | default .Site.Params.site.description -}}
-  <meta name="description" content="{{ $desc }}">
-  
-  {{- $canonical := .Params.canonical | default .Permalink -}}
-  <link rel="canonical" href="{{ $canonical }}">
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="{{- if .Params.og_title -}}{{ .Params.og_title }}{{- else if .Title -}}{{ .Title }} | {{ .Site.Title }}{{- else -}}{{ .Site.Title }}{{- end }}">
-  <meta property="og:description" content="{{ $desc }}">
-  <meta property="og:type" content="{{ .Params.og_type | default "website" }}">
-  <meta property="og:url" content="{{ .Permalink }}">
-  <meta property="og:image" content="{{ .Params.featured_image | default (print .Site.BaseURL "images/tn.png") }}">
-  <meta property="og:site_name" content="{{ .Site.Title }}">
-  
-  <!-- Twitter / Instagram / Social (replaced Twitter) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:description" content="{{ $desc }}">
-  <meta name="instagram:site" content="somarosa.uk">
-  <meta name="facebook:site" content="somarosaonline">
-
-  <!-- Article timestamps -->
-  {{- with .Date }}
-    <meta property="article:published_time" content="{{ . }}">
-  {{- end }}
-  {{- with .Lastmod }}
-    <meta property="article:updated_time" content="{{ . }}">
-  {{- end }}
+  <!-- SEO Partial -->
+  {{- partial "seo.html" . -}}
 </head>

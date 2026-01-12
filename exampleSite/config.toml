@@ -6,30 +6,110 @@ DefaultContentLanguage = "en"
 enableInlineShortcodes = true
 theme = "tella"
 enableRobotsTXT = true
+enableGitInfo = true  # Optional: helps with "last updated" info for SEO
 
 # Google Analytics (optional)
-#googleAnalytics = "UA-12345678-1"
+# googleAnalytics = "UA-12345678-1"
 
 # Disqus Comment System (optional)
-#disqusShortname = ""
+# disqusShortname = ""
+
+[sitemap]
+  changefreq = "monthly"
+  priority = 0.7
+  filename = "sitemap.xml"
 
 [params]
-
   showBlog = true
   mainSections = ["blog"]
   googleFonts = true
 
   [params.logo]
     main = "img/logo/logo.svg"
-    alt = "Tella Logo"
+    alt = "Somarosa Logo"
     size = "h-14"
 
   [params.site]
-    name = "Tella"
-    description = "Tella is a modern Hugo theme optimized for businesses, organizations, and open source projects. Fully responsive and SEO-friendly."
+    name = "Somarosa"
+    description = "Somarosa offers transformative feminine embodiment, somatic practices, nervous system, tantra, and sensuality workshops. Fully responsive and SEO-friendly."
 
   [params.icon]
     fontawesome = true
 
   [params.homepage_meta_tags]
-    meta_description = "Tella is a Hugo theme for modern websites, companies, and organizations. Fully respo_
+    meta_title = "Somarosa - Feminine Embodiment, Tantra & Somatic Workshops"
+    meta_description = "Join Somarosa to reconnect with your body, nervous system, and sensual energy through feminine embodiment, somatic work, and tantra practices. Experience vitality, pleasure, and transformation."
+    meta_keywords = "feminine embodiment, somatic work, tantra, nervous system, sensuality, pleasure, empowerment, bodywork, temple, somarosa"
+    meta_og_title = "Somarosa - Feminine Embodiment & Tantra Workshops"
+    meta_og_type = "website"
+    meta_og_url = "https://somarosa.co.uk"
+    meta_og_image = "https://somarosa.co.uk/img/og-image.png" # Replace with your actual OG image
+    meta_og_description = "Reconnect with your body, nervous system, and sensual energy through Somarosa's feminine embodiment, somatic, and tantra workshops."
+    meta_og_instagram = "https://www.instagram.com/somarosa.uk"
+    meta_og_facebook = "https://www.facebook.com/somarosaonline"
+    canonical_url = "https://somarosa.co.uk/"
+    
+[menu]
+  # Header Menu
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    identifier = "workshops"
+    name = "Workshops"
+    url = "/workshops/"
+    weight = 2
+
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 3
+
+  [[menu.main]]
+    identifier = "contact"
+    name = "Contact"
+    url = "/contact/"
+    weight = 4
+
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "/blog/"
+    weight = 5
+
+  # Footer Menu
+  [[menu.footer]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+  [[menu.footer]]
+    name = "Workshops"
+    url = "/workshops/"
+    weight = 2
+
+  [[menu.footer]]
+    name = "About"
+    url = "/about/"
+    weight = 3
+
+  [[menu.footer]]
+    name = "Contact"
+    url = "/contact/"
+    weight = 4
+
+  [[menu.footer]]
+    name = "Instagram"
+    url = "https://www.instagram.com/somarosa.uk"
+    pre = "<i class='icon-instagram text-2xl'></i>"
+    weight = 5
+
+  [[menu.footer]]
+    name = "Facebook"
+    url = "https://www.facebook.com/somarosaonline"
+    pre = "<i class='icon-facebook text-2xl'></i>"
+    weight = 6

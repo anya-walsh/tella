@@ -1,23 +1,86 @@
-{{- partial "analytics" . -}}
-<meta charset="utf-8">
-<title>{{site.Title}}{{if not .IsHome}} | {{.Title}}{{end}}</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="apple-touch-icon" sizes="180x180" href='{{ "apple-touch-icon.png" | relURL }}'>
-<link rel="icon" type="image/png" sizes="32x32" href='{{ "favicon-32x32.png" | relURL }}'>
-<link rel="icon" type="image/png" sizes="16x16" href='{{ "favicon-16x16.png" | relURL }}'>
-<link rel="manifest" href='{{ "site.webmanifest" | relURL }}'>
-{{ if .Site.Params.icon.fontawesome }}
-<link href='{{ "/css/fa6.min.css" | relURL }}' rel="stylesheet" type="text/css">
-{{ end }}
-{{ $styles := resources.Get "css/style.css" | postCSS }}
-{{ if hugo.IsServer }}
-<link rel="stylesheet" href="{{ $styles.RelPermalink }}">
-{{ else }}
-{{ $styles := $styles | minify | fingerprint | resources.PostProcess }}
-<link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
-{{ end }}
-{{ if .IsHome }}
-<link rel="stylesheet" href='{{ "/css/swiper-bundle.min.css" | relURL }}'>
-{{ end }}
-<link href='{{ "/css/style.min.css" | relURL }}' rel="stylesheet" type="text/css">
-<link rel="stylesheet" href='{{ "/css/custom.css" | relURL }}'>
+<head>
+  {{- /* Analytics Partial */ -}}
+  {{- partial "analytics" . -}}
+
+  <!-- Charset & Responsive Meta -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Dynamic Page Title -->
+  <title>{{ .Site.Title }}{{ if not .IsHome }} | {{ .Title }}{{ end }}</title>
+
+  <!-- Favicons & Manifest -->
+  <link rel="apple-touch-icon" sizes="180x180" href='{{ "apple-touch-icon.png" | relURL }}'>
+  <link rel="icon" type="image/png" sizes="32x32" href='{{ "favicon-32x32.png" | relURL }}'>
+  <link rel="icon" type="image/png" sizes="16x16" href='{{ "favicon-16x16.png" | relURL }}'>
+  <link rel="manifest" href='{{ "site.webmanifest" | relURL }}'>
+
+  <!-- FontAwesome -->
+  {{ if .Site.Params.icon.fontawesome }}
+    <link href='{{ "/css/fa6.min.css" | relURL }}' rel="stylesheet" type="text/css">
+  {{ end }}
+
+  <!-- Main Styles -->
+  {{ $styles := resources.Get "css/style.css" | postCSS }}
+  {{ if hugo.IsServer }}
+    <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
+  {{ else }}
+    {{ $styles := $styles | minify | fingerprint | resources.PostProcess }}
+    <link rel="stylesheet" href="{{ $styles.RelPermalink }}" />
+  {{ end }}
+
+  <!-- Home Page Only Styles -->
+  {{ if .IsHome }}
+    <link rel="stylesheet" href='{{ "/css/swiper-bundle.min.css" | relURL }}'>
+  {{ end }}
+
+  <!-- Custom Styles -->
+  <link href='{{ "/css/style.min.css" | relURL }}' rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href='{{ "/css/custom.css" | relURL }}'>
+
+  {{- /* ---------------------- */ -}}
+  {{- /* SEO / Open Graph / Social Tags */ -}}
+  {{- $site := .Site -}}
+  {{- $page := . -}}
+
+  <!-- Meta Description -->
+  {{ with $page.Params.description }}
+    <meta name="description" content="{{ . }}">
+  {{ else if $site.Params.homepage_meta_tags.meta_description }}
+    <meta name="description" content="{{ $site.Params.homepage_meta_tags.meta_description }}">
+  {{ end }}
+
+  <!-- Keywords -->
+  {{ with $page.Params.keywords }}
+    <meta name="keywords" content="{{ delimit . ", " }}">
+  {{ else if $site.Params.homepage_meta_tags.meta_keywords }}
+    <meta name="keywords" content="{{ $site.Params.homepage_meta_tags.meta_keywords }}">
+  {{ end }}
+
+  <!-- Canonical URL -->
+  {{ with $page.Params.canonical_url }}
+    <link rel="canonical" href="{{ . }}">
+  {{ else if $site.Params.homepage_meta_tags.canonical_url }}
+    <link rel="canonical" href="{{ . }}">
+  {{ else }}
+    <link rel="canonical" href="{{ $page.Permalink }}">
+  {{ end }}
+
+  <!-- Open Graph / Facebook / Instagram -->
+  <meta property="og:title" content="{{ if $page.Params.og_title }}{{ $page.Params.og_title }}{{ else if $page.Title }}{{ $page.Title }} | {{ $site.Title }}{{ else }}{{ $site.Title }}{{ end }}">
+  <meta property="og:description" content="{{ with $page.Params.description }}{{ . }}{{ else if $site.Params.homepage_meta_tags.meta_description }}{{ $site.Params.homepage_meta_tags.meta_description }}{{ end }}">
+  <meta property="og:type" content="{{ with $page.Params.og_type }}{{ . }}{{ else if $site.Params.homepage_meta_tags.meta_og_type }}{{ $site.Params.homepage_meta_tags.meta_og_type }}{{ else }}website{{ end }}">
+  <meta property="og:url" content="{{ $page.Permalink }}">
+  <meta property="og:site_name" content="{{ $site.Title }}">
+  <meta property="og:image" content="{{ with $page.Params.featured_image }}{{ . }}{{ else if $site.Params.homepage_meta_tags.meta_og_image }}{{ $site.Params.homepage_meta_tags.meta_og_image }}{{ end }}">
+  <meta property="og:instagram" content="{{ $site.Params.homepage_meta_tags.meta_og_instagram }}">
+  <meta property="og:facebook" content="{{ $site.Params.homepage_meta_tags.meta_og_facebook }}">
+
+  <!-- Article Dates -->
+  {{ with $page.Date }}
+    <meta property="article:published_time" content="{{ . }}">
+  {{ end }}
+  {{ with $page.Lastmod }}
+    <meta property="article:modified_time" content="{{ . }}">
+  {{ end }}
+</head>
